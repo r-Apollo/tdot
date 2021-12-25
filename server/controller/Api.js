@@ -32,14 +32,7 @@ export const getTimeslotsInfo = async (req, res) => {
 
 //Post requests
 export const addPerson = async(req, res) => {
-    const Person = new PersonModel({
-        name: req.body.name,
-        lastName: req.body.lastName,
-        eMail: req.body.eMail,
-        day: req.body.day,
-        time: req.body.time,
-        dependants: req.body.dependants
-    })
+    const Person = new PersonModel(req.body)
     await Person.save()
     res.status(201).send(Person)
 }

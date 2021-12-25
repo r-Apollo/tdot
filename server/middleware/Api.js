@@ -9,6 +9,14 @@ import MailModel from "../models/Mail.js"
 dotnet.config()
 
 export const validateRegister = async(req, res, next) => {
+    //Checks if all data is given.
+    if(!req.body.name) return res.status(406).json({message: "No name was given."})
+    if(!req.body.lastName) return res.status(406).json({message: "No last name was given."})
+    if(!req.body.eMail) return res.status(406).json({message: "No email was given."})
+    if(!req.body.day) return res.status(406).json({message: "No day was given."})
+    if(!req.body.time) return res.status(406).json({message: "No time was given."})
+    if(!req.body.dependants) return res.status(406).json({message: "No dependants are given."})
+
     //Checks for to many registered Persons
     const personCount = PersonModel.countDocuments({
         time: req.body.time,
