@@ -4,6 +4,7 @@ import nodemailer from "nodemailer"
 import hbs from "nodemailer-express-handlebars"
 import path from "node:path"
 import PersonModel from "../models/Person.js";
+import MailModel from "../models/Mail.js"
 
 dotnet.config()
 
@@ -56,11 +57,15 @@ export const handleEmail = async(req, res, next) => {
         }
     }
 
-    transporter.sendMail(mailOptions, (err, data) => {
+    transporter.sendMail(mailOptions, async (err, data) => {
         if(err) {
             console.log(err)
         }
-        else console.log("Email sent")
+        else {
+            console.log(data)
+            const MailLog = new MailModel(data)
+            await MailLog.save()
+        }
     })
 
     next()
