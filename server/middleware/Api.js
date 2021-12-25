@@ -18,8 +18,8 @@ export const validateRegister = async(req, res, next) => {
     if(process.env.MAX_PERSONS - (personCount + req.body.dependants + 1) > 0) return res.status(406).json({message: "Zuviele Personen."})
 
     //Checks if eMail is already in use.
-    const matchingMails = await PersonModel.find({eMail:req.body.eMail})
-    if(matchingMails.length > 0) return res.status(406).json({message: "Diese eMail ist bereits registriert."})
+    const matchingMails = await PersonModel.countDocuments({eMail:req.body.eMail})
+    if(matchingMails > 0) return res.status(406).json({message: "Diese eMail ist bereits registriert."})
 
     //Deep email validator
     const validation = await emailValidator.validate(req.body.eMail)
@@ -47,7 +47,7 @@ export const handleEmail = async(req, res, next) => {
         viewPath: path.resolve("./views")
     }))
 
-    let mailOptions = {
+    const mailOptions = {
         from: `"René Delion" ${process.env.EMAIL_USER}`,
         to: req.body.eMail,
         subject: "Testing",
@@ -62,7 +62,6 @@ export const handleEmail = async(req, res, next) => {
             console.log(err)
         }
         else {
-            console.log(data)
             const MailLog = new MailModel(data)
             await MailLog.save()
         }
