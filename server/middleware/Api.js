@@ -56,7 +56,7 @@ export const handleEmail = async(req, res, next) => {
         }
     }
 
-    await transporter.sendMail(mailOptions, (err, data) => {
+    transporter.sendMail(mailOptions, (err, data) => {
         if(err) {
             console.log(err)
         }
