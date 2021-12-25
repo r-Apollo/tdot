@@ -1,7 +1,4 @@
 import express from "express"
-import https from "https"
-import fs from "fs"
-import path from "path"
 import cors from "cors"
 import apiRoutes from "./routes/Api.js"
 
@@ -20,11 +17,6 @@ app.get("*", (req, res) => {
     res.status(404).send("This page does not exist.")
 })
 
-const sslServer = https.createServer({
-    key: fs.readFileSync(path.resolve("./cert/key.pem")),
-    cert: fs.readFileSync(path.resolve("./cert/cert.pem"))
-}, app)
-
-sslServer.listen(PORT, () => {
-    console.log(`Api is running on https://localhost:${PORT}.`)
+app.listen(PORT, () => {
+    console.log(`Api running on http://localhost:${PORT}.`)
 })
