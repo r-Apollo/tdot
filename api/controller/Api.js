@@ -17,15 +17,22 @@ export const getAllPersons = async (req, res) => {
 }
 
 export const getTimeslotsInfo = async (req, res) => {
+    const persons = await PersonModel.find({})
+
+    const early = Array.from(persons).filter(person => {if (person.time == "11:00-12:00") {return person}})
+    const late = Array.from(persons).filter(person => {if (person.time == "13:00-14:00") {return person}})
+
+    let earlyAmmount = 0
+    let lateAmmount = 0
+
+    early.forEach(person => earlyAmmount += person.dependants)
+    late.forEach(person => lateAmmount += person.dependants)
+
     const response = {
-        dayOne: {
-            "11:00-12:00": await PersonModel.countDocuments({time:"11:00-12:00", day:1}),
-            "13:00-14:00": await PersonModel.countDocuments({time:"13:00-14:00", day:1})
+        timeslots: {
+            "11:00-12:00": earlyAmmount,
+            "13:00-14:00": lateAmmount
         },
-        dayTwo: {
-            "11:00-12:00": await PersonModel.countDocuments({time:"11:00-12:00", day:2}),
-            "13:00-14:00": await PersonModel.countDocuments({time:"13:00-14:00", day:2})
-        }
     }
     res.status(200).send(response)
 }

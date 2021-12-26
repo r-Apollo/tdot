@@ -16,13 +16,17 @@ export const validateRegister = async(req, res, next) => {
     if(!req.body.time) return res.status(406).json({message: "No time was given."})
     if(!req.body.dependants) return res.status(406).json({message: "No dependants are given."})
 
-    if(req.body.dependants > process.env.MAX_DEPENDANTS) return res.status(406).json({message: "Too mandy dependants given."})
+    if(req.body.dependants > process.env.MAX_DEPENDANTS) return res.status(403).json({message: "Too mandy dependants given."})
 
     //Checks for to many registered Persons
-    const personCount = PersonModel.countDocuments({
+    const personCount = await PersonModel.find({
         time: req.body.time,
-        day: req.body.day
     })
+
+    let counter = req.body.dependants
+    Array.from(personCount).forEach(person => counter += person.dependants)
+    if (counter > process.env.MAX_PERSONS) return res.status(200).json({count: counter})
+
     //Checks if new people can be registered.
     if(process.env.MAX_PERSONS - (personCount + req.body.dependants + 1) > 0) return res.status(406).json({message: "Zuviele Personen."})
 

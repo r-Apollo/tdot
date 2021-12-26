@@ -2,7 +2,7 @@ import express from "express"
 import cors from "cors"
 import apiRoutes from "./routes/Api.js"
 
-const PORT = 4003
+const PORT = 3000
 const app = express()
 
 app.use(express.json())
