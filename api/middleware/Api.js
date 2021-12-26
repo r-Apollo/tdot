@@ -17,6 +17,8 @@ export const validateRegister = async(req, res, next) => {
     if(!req.body.time) return res.status(406).json({message: "No time was given."})
     if(!req.body.dependants) return res.status(406).json({message: "No dependants are given."})
 
+    if(req.body.dependants > process.env.MAX_DEPENDANTS) return res.status(406).json({message: "Too mandy dependants given."})
+
     //Checks for to many registered Persons
     const personCount = PersonModel.countDocuments({
         time: req.body.time,
