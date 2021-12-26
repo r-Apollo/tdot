@@ -13,10 +13,6 @@ const PersonSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    day: {
-        type: Number,
-        required: true,
-    },
     time: {
         type: String,
         required: true
